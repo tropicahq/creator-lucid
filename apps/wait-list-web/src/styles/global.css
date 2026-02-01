@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme inline {
+    --font-sans: 'Inter', sans-serif;
+    --color-lucid-purple: #6366F1;
+    --color-lucid-dark: #111827;
+    --color-lucid-light: #F5F3FF;
+    --color-lucid-coral: #FF6B6B;
+    --color-lucid-coralLight: #FF8787;
+    --color-primary: #4030e8;
+    --color-accent-coral: #ff7f50;
+    --color-background-light: #f6f6f8;
+    --color-background-dark: #121121;
+    --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-full: 9999px;
+    ;
+    /* --tw-bg-button-gradient: linear-gradient(90deg, #FF8E8E 0%, #FF6B6B 100%); */
+}
+
+:root {
+    --hero-glow: radial-gradient(circle at 50% 0%, #E0E7FF 0%, #F5F3FF 40%, #FFFFFF 100%);
+    --button-gradient: linear-gradient(90deg, #FF8E8E 0%, #FF6B6B 100%);
+    --deep-purple-gradient: linear-gradient(135deg, #818CF8 0%, #6366F1 100%);
+}
+
+@layer base {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Custom scrollbar for a polished feel */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #c7c7c7;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #a1a1a1;
+    }
+}
+
+@layer utilities {
+
+    /* Custom Pill Input Wrapper */
+    .pill-input-wrapper {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Timeline line for Steps section */
+    .step-connector::after {
+        content: '';
+        position: absolute;
+        top: 2rem;
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        background-color: #E5E7EB;
+        z-index: -1;
+    }
+
+    .step-connector:last-child::after {
+        display: none;
+    }
+
+    /* Feature card hover effect */
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .hero-gradient {
+        background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+    }
+
+    .cta-gradient {
+        background: linear-gradient(135deg, #4030e8 0%, #6366f1 100%);
+    }
+}
