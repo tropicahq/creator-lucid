@@ -3,8 +3,8 @@ import "dotenv/config";
 
 import { Hono } from "hono";
 import type { APIRoute } from 'astro';
-import { convex, api } from "@creator-lucid/db"
-
+import { api, ConvexHttpClient } from "@creator-lucid/db"
+const convex = new ConvexHttpClient(import.meta.env.CONVEX_URL);
 export const prerender = false;
 const app = new Hono().basePath("/api");
 
