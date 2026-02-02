@@ -11,6 +11,7 @@ const app = new Hono().basePath("/api");
 app.get('/', (c) => c.json({ message: "Welcome to the API root!!" }));
 
 app.post('/waitlist', async (c) => {
+    console.log("Convex Url: ", import.meta.env.CONVEX_URL);
     const { email } = await c.req.json();
     // Here you would typically add the email to your waitlist database
     // console.log(`New waitlist signup: ${email}`);
