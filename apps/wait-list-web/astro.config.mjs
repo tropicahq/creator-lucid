@@ -15,7 +15,7 @@ export default defineConfig({
 
   experimental: {
     contentIntellisense: true,
-    csp: true,
+    // csp: true,
   },
 
   adapter: vercel()
