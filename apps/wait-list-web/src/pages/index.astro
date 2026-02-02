@@ -2,8 +2,6 @@
 // import "sweetalert2/src/sweetalert2.scss";
 import "sweetalert2/themes/material-ui.css";
 import Layout from "../layouts/Layout.astro";
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
@@ -311,20 +309,23 @@ import Layout from "../layouts/Layout.astro";
 						Join alot of creators on the waitlist and get notified
 						early when we launch.
 					</p>
-					<div
+					<form
+						id="wait-list-form"
 						class="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row"
 					>
 						<input
 							class="h-14 w-full rounded-full border-none bg-white px-6 text-gray-900 shadow-xl focus:ring-2 focus:ring-accent-coral focus:outline-accent-coral"
 							placeholder="Your best email"
+							name="email"
 							type="email"
 						/>
 						<button
+							type="submit"
 							class="h-14 whitespace-nowrap rounded-full bg-accent-coral px-8 text-base font-bold text-white shadow-lg transition-all hover:bg-[#ff6a3d] hover:shadow-accent-coral/20 active:scale-95"
 						>
 							Join Waitlist
 						</button>
-					</div>
+					</form>
 				</div>
 			</div>
 		</section>
@@ -334,67 +335,69 @@ import Layout from "../layouts/Layout.astro";
 <script>
 	import Swal from "sweetalert2";
 	document.addEventListener("DOMContentLoaded", function () {
-		const formElement = document.getElementById("wait-list-form");
-		formElement?.addEventListener("submit", async function (e) {
-			e.preventDefault();
-			const form = e.target;
-			if (!(form instanceof HTMLFormElement)) return;
-			const formData = new FormData(form);
-			const email = formData.get("email");
-			if (!email) {
-				Swal.fire({
-					theme: "material-ui-light",
-					icon: "error",
-					title: "Please enter an email",
-				});
-				return;
-			}
-
-			Swal.fire({
-				theme: "material-ui-light",
-				title: "Processing...",
-				html: "Submitting — please wait",
-				allowOutsideClick: false,
-				didOpen: () => {
-					Swal.showLoading();
-				},
-			});
-
-			try {
-				const res = await fetch("/api/waitlist", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ email: String(email) }),
-				});
-
-				if (!res.ok) {
-					const errText = await res
-						.text()
-						.catch(() => res.statusText);
+		const formElements = document.querySelectorAll("#wait-list-form");
+		formElements.forEach((formElement) => {
+			formElement?.addEventListener("submit", async function (e) {
+				e.preventDefault();
+				const form = e.target;
+				if (!(form instanceof HTMLFormElement)) return;
+				const formData = new FormData(form);
+				const email = formData.get("email");
+				if (!email) {
 					Swal.fire({
 						theme: "material-ui-light",
 						icon: "error",
-						title: "Error",
-						text: errText || "Something went wrong",
+						title: "Please enter an email",
 					});
 					return;
 				}
 
 				Swal.fire({
 					theme: "material-ui-light",
-					icon: "success",
-					title: "Success",
-					text: "You've been added to the waitlist!",
+					title: "Processing...",
+					html: "Submitting — please wait",
+					allowOutsideClick: false,
+					didOpen: () => {
+						Swal.showLoading();
+					},
 				});
-				form.reset();
-			} catch (err) {
-				Swal.fire({
-					theme: "material-ui-light",
-					icon: "error",
-					title: "Network error",
-					text: String(err),
-				});
-			}
+
+				try {
+					const res = await fetch("/api/waitlist", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ email: String(email) }),
+					});
+
+					if (!res.ok) {
+						const errText = await res
+							.text()
+							.catch(() => res.statusText);
+						Swal.fire({
+							theme: "material-ui-light",
+							icon: "error",
+							title: "Error",
+							text: errText || "Something went wrong",
+						});
+						return;
+					}
+
+					Swal.fire({
+						theme: "material-ui-light",
+						icon: "success",
+						title: "Success",
+						text: "You've been added to the waitlist!",
+					});
+					form.reset();
+				} catch (err) {
+					Swal.fire({
+						theme: "material-ui-light",
+						icon: "error",
+						title: "Network error",
+						text: String(err),
+					});
+				}
+			});
 		});
 	});
 </script>

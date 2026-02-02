@@ -1,7 +1,10 @@
+import "dotenv/config";
+// load .env.local
 
 import { Hono } from "hono";
 import type { APIRoute } from 'astro';
 import { convex, api } from "@creator-lucid/db"
+
 export const prerender = false;
 const app = new Hono().basePath("/api");
 

@@ -13,6 +13,7 @@
     "@creator-lucid/db": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
+    "dotenv": "^17.2.3",
     "hono": "^4.11.7",
     "sweetalert2": "^11.26.17",
     "tailwindcss": "^4.1.18"
