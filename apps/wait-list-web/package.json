@@ -10,9 +10,14 @@
   },
   "dependencies": {
     "@astrojs/vercel": "^9.0.4",
+    "@creator-lucid/db": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
     "hono": "^4.11.7",
+    "sweetalert2": "^11.26.17",
     "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.97.3"
   }
 }

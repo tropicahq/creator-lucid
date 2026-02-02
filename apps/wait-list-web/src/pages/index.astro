@@ -1,6 +1,7 @@
 ---
+// import "sweetalert2/src/sweetalert2.scss";
+import "sweetalert2/themes/material-ui.css";
 import Layout from "../layouts/Layout.astro";
-
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
@@ -31,7 +32,8 @@ import Layout from "../layouts/Layout.astro";
 					Instant, data-driven insights that stop the guesswork and
 					grow your audience.
 				</p>
-				<div
+				<form
+					id="wait-list-form"
 					class="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row"
 				>
 					<div class="relative flex-1">
@@ -40,24 +42,26 @@ import Layout from "../layouts/Layout.astro";
 							>mail</span
 						>
 						<input
-							class="h-14 w-full rounded-xl border-none bg-white px-12 text-gray-900 shadow-xl ring-1 ring-gray-200 focus:ring-2 focus:ring-primary"
+							class="h-14 w-full rounded-full border-none bg-white px-12 text-gray-900 shadow-xl ring-1 ring-gray-200 focus:ring-2 focus:ring-primary focus:outline-accent-coral"
 							placeholder="Enter your email"
+							name="email"
 							type="email"
 						/>
 					</div>
 					<button
-						class="h-14 rounded-xl bg-accent-coral px-8 text-base font-bold text-white shadow-lg transition-all hover:bg-[#ff6a3d] hover:shadow-accent-coral/20 active:scale-95"
+						type="submit"
+						class="h-14 rounded-full bg-accent-coral px-8 text-base font-bold text-white shadow-lg transition-all hover:bg-[#ff6a3d] hover:shadow-accent-coral/20 active:scale-95"
 					>
 						Join Waitlist
 					</button>
-				</div>
+				</form>
 				<p class="mt-4 text-xs text-gray-500">
 					No credit card required. Launching Soon.
 				</p>
 			</div>
 		</section>
 		<!-- Problem Section -->
-		<section class="max-w-300 px-6 py-24" id="problem">
+		<section class="mx-auto max-w-300 px-6 py-24" id="problem">
 			<div class="mb-16 text-center">
 				<h2
 					class="text-3xl font-bold tracking-tight text-[#121118] md:text-4xl"
@@ -128,7 +132,7 @@ import Layout from "../layouts/Layout.astro";
 			</div>
 		</section>
 		<!-- Process Section -->
-		<section class="max-w-300 px-6 pb-24" id="process">
+		<section class="mx-auto max-w-300 px-6 pb-24" id="process">
 			<div class="mb-16 text-center">
 				<h2 class="text-3xl font-bold tracking-tight text-[#121118]">
 					How It Works
@@ -186,7 +190,7 @@ import Layout from "../layouts/Layout.astro";
 		</section>
 		<!-- Comparison Section -->
 		<section class="bg-gray-50 px-6 py-24">
-			<div class="mx-auto max-w-[800px]">
+			<div class="mx-auto max-w-200">
 				<div class="mb-12 text-center">
 					<h2
 						class="text-3xl font-bold tracking-tight text-[#121118]"
@@ -291,9 +295,9 @@ import Layout from "../layouts/Layout.astro";
 			</div>
 		</section>
 		<!-- Final CTA -->
-		<section class="mx-auto max-w-[1200px] py-24">
+		<section class="mx-auto max-w-300 py-24">
 			<div
-				class="cta-gradient relative flex flex-col items-center overflow-hidden rounded-[2rem] px-8 py-20 text-center text-white"
+				class="cta-gradient relative flex flex-col items-center overflow-hidden rounded-4xl px-8 py-20 text-center text-white"
 			>
 				<div
 					class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"
@@ -311,12 +315,12 @@ import Layout from "../layouts/Layout.astro";
 						class="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row"
 					>
 						<input
-							class="h-14 w-full rounded-xl border-none bg-white px-6 text-gray-900 shadow-xl focus:ring-2 focus:ring-accent-coral"
+							class="h-14 w-full rounded-full border-none bg-white px-6 text-gray-900 shadow-xl focus:ring-2 focus:ring-accent-coral focus:outline-accent-coral"
 							placeholder="Your best email"
 							type="email"
 						/>
 						<button
-							class="h-14 whitespace-nowrap rounded-xl bg-accent-coral px-8 text-base font-bold text-white shadow-lg transition-all hover:bg-[#ff6a3d] hover:shadow-accent-coral/20 active:scale-95"
+							class="h-14 whitespace-nowrap rounded-full bg-accent-coral px-8 text-base font-bold text-white shadow-lg transition-all hover:bg-[#ff6a3d] hover:shadow-accent-coral/20 active:scale-95"
 						>
 							Join Waitlist
 						</button>
@@ -326,3 +330,71 @@ import Layout from "../layouts/Layout.astro";
 		</section>
 	</main>
 </Layout>
+
+<script>
+	import Swal from "sweetalert2";
+	document.addEventListener("DOMContentLoaded", function () {
+		const formElement = document.getElementById("wait-list-form");
+		formElement?.addEventListener("submit", async function (e) {
+			e.preventDefault();
+			const form = e.target;
+			if (!(form instanceof HTMLFormElement)) return;
+			const formData = new FormData(form);
+			const email = formData.get("email");
+			if (!email) {
+				Swal.fire({
+					theme: "material-ui-light",
+					icon: "error",
+					title: "Please enter an email",
+				});
+				return;
+			}
+
+			Swal.fire({
+				theme: "material-ui-light",
+				title: "Processing...",
+				html: "Submitting — please wait",
+				allowOutsideClick: false,
+				didOpen: () => {
+					Swal.showLoading();
+				},
+			});
+
+			try {
+				const res = await fetch("/api/waitlist", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ email: String(email) }),
+				});
+
+				if (!res.ok) {
+					const errText = await res
+						.text()
+						.catch(() => res.statusText);
+					Swal.fire({
+						theme: "material-ui-light",
+						icon: "error",
+						title: "Error",
+						text: errText || "Something went wrong",
+					});
+					return;
+				}
+
+				Swal.fire({
+					theme: "material-ui-light",
+					icon: "success",
+					title: "Success",
+					text: "You've been added to the waitlist!",
+				});
+				form.reset();
+			} catch (err) {
+				Swal.fire({
+					theme: "material-ui-light",
+					icon: "error",
+					title: "Network error",
+					text: String(err),
+				});
+			}
+		});
+	});
+</script>
